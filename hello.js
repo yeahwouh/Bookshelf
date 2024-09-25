@@ -14,8 +14,10 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
 
 
 
+const table = document.querySelector(".book_list")
 function openForm() {
-    const table = document.getElementsByClassName("book_list")
+    const container = document.querySelector(".container")
+    table.remove();
     createForm();
 }
 
@@ -164,7 +166,7 @@ function createForm() {
 
 
     // Append form to the container
-    let container = document.querySelector("body")
+    let container = document.querySelector(".container")
     container.appendChild(form);
 
     function addBookToLibrary() {
@@ -182,6 +184,7 @@ function createForm() {
         e.preventDefault()
         addBookToLibrary()
         form.remove();
+        container.appendChild(table);
     })
 }
 
