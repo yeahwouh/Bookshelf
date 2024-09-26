@@ -11,7 +11,7 @@ th {
     text-align: center;
     border:4px solid black;
 }
-td{
+td {
     text-align: left;
     border: 1px solid black; /* Black line to separate rows */
 }

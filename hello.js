@@ -2,21 +2,20 @@ const myLibrary = [];
 
 function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     // the constructor...
-    this.title = title
-    this.fiction = fiction
-    this.author = author
-    this.genres = genres
-    this.date_s = date_s
-    this.date_f = date_f
-    this.rating = rating
+    this.title = title;
+    this.fiction = fiction;
+    this.author = author;
+    this.genres = genres;
+    this.date_s = date_s;
+    this.date_f = date_f;
+    this.rating = rating;
 }
 
 
 
 
-const table = document.querySelector(".book_list")
-function openForm() {
-    const container = document.querySelector(".container")
+const table = document.querySelector("tbody")
+function openForm() { //Called when the "NEW Button is clicked
     table.remove();
     createForm();
 }
@@ -24,6 +23,7 @@ function openForm() {
 let form;
 
 function createForm() {
+    // Creating the form
     form = document.createElement('form');
     form.id = 'bookForm';
 
@@ -77,8 +77,8 @@ function createForm() {
     form.appendChild(labelFictionNo);
     form.appendChild(document.createElement('br'));
     form.appendChild(document.createElement('br'));
-    // Author
 
+    // Author
     let labelAuthor = document.createElement('label');
     labelAuthor.setAttribute('for', 'author');
     labelAuthor.textContent = 'Author:';
@@ -93,8 +93,8 @@ function createForm() {
     form.appendChild(inputAuthor);
     form.appendChild(document.createElement('br'));
     form.appendChild(document.createElement('br'));
-    // Genres
 
+    // Genres
     let labelGenres = document.createElement('label');
     labelGenres.setAttribute('for', 'genres');
     labelGenres.textContent = 'Genres (comma separated):';
@@ -109,8 +109,8 @@ function createForm() {
     form.appendChild(inputGenres);
     form.appendChild(document.createElement('br'));
     form.appendChild(document.createElement('br'));
-    // Date Started
 
+    // Date Started
     let labelDateStarted = document.createElement('label');
     labelDateStarted.setAttribute('for', 'dateStarted');
     labelDateStarted.textContent = 'Date Started:';
@@ -166,23 +166,41 @@ function createForm() {
 
 
     // Append form to the container
-    let container = document.querySelector(".container")
+    let container = document.querySelector(".container");
     container.appendChild(form);
 
     function addBookToLibrary() {
-        // do stuff here
-        const formData = new FormData(form)
+        // Append book to the library based on formData
+        const formData = new FormData(form);
         bookFeatures = [];
         for (item of formData) {
-            bookFeatures.push(item[1])
+            bookFeatures.push(item[1]);
         }
         let newBook = new Book(bookFeatures)
-        myLibrary.push(newBook)
-        console.log(newBook)
+        myLibrary.push(newBook);
+        console.log(newBook);
+    }
+    function addBookToTable(){
+        // Create a new Row containing the last book added to the library
+        let lastBook = myLibrary[myLibrary.length -1];
+        let newRow = document.createElement("tr");
+        // Appending the individual features
+        for (feature in lastBook) {
+            let cell = document.createElement("td");
+            let dataPoint = document.createElement("p")
+            // lastBook is an object...
+            dataPoint.textContent = lastBook[feature]
+
+            cell.appendChild(dataPoint)
+            newRow.appendChild(cell)
+        }
+        // Append newRow
+        table.appendChild(newRow)
     }
     form.addEventListener("submit", (e) => {
-        e.preventDefault()
-        addBookToLibrary()
+        e.preventDefault();
+        addBookToLibrary();
+        addBookToTable();
         form.remove();
         container.appendChild(table);
     })
