@@ -1,4 +1,4 @@
-const myLibrary = [];
+let myLibrary = [];
 
 let book_id = 0;
 function Book([title, fiction, author, genres, date_s, date_f, rating]) {
@@ -10,18 +10,81 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     this.date_s = date_s;
     this.date_f = date_f;
     this.rating = rating;
-    this.id = book_id + 1
+    this.id = book_id + 1;
+    this.read = false;
 }
 
 
 
-const newButton = document.querySelector(`.newBookButton`)
-const tableBody = document.querySelector('tbody')
+const tableHead = document.querySelector('thead')
+let tableBody = document.querySelector('tbody')
 function openForm() { //Called when the "NEW Button is clicked
-    newButton.remove();
+    tableHead.remove();
     tableBody.remove();
-    console.log(newButton)
     createForm();
+}
+
+function addBookToTable(){
+    // Create a new Row containing the last book added to the library
+    let lastBookIndex = myLibrary.length -1;
+    appendRow(lastBookIndex);
+}
+
+function appendRow(myLibIndex) {
+    let newBook = myLibrary[myLibIndex]
+    let newRow = document.createElement("tr");
+    // Deleting the id and the "read status" to make sure it doesn't show up in the table
+    let id = newBook["id"];
+    delete newBook["id"];
+    let read = newBook["read"];
+    delete newBook["read"];
+
+    // Appending the individual features
+    for (let feature in newBook) {
+        let cell = document.createElement("td");
+        let dataPoint = document.createElement("p")
+        // newBook is an object...
+        dataPoint.textContent = newBook[feature];
+
+        cell.appendChild(dataPoint);
+        newRow.appendChild(cell);
+    }
+    // Adding the read and delete buttons
+    let buttonCell = document.createElement("td");
+    buttonCell.classList.add("buttonCell")
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.onclick = deleteBook(id);
+
+    let readButton = document.createElement("button")
+    readButton.textContent = "Change read status"
+
+    buttonCell.appendChild(deleteButton);
+    buttonCell.appendChild(readButton);
+    newRow.appendChild(buttonCell)
+
+    // Append newRow
+    tableBody.appendChild(newRow)
+
+    // Re appending the id and the read status
+    newBook["id"] = id;
+    newBook["read"] = read;
+}
+
+function addBookToLibrary() {
+    // Append book to the library based on formData
+    const formData = new FormData(form);
+    let bookFeatures = [];
+    for (let item of formData) {
+        bookFeatures.push(item[1]);
+    }
+    let newBook = new Book(bookFeatures)
+    myLibrary.push(newBook);
+    console.log(newBook);
+}
+
+function deleteBook(id) {
+
 }
 
 let form;
@@ -173,51 +236,14 @@ function createForm() {
     let container = document.querySelector(".container");
     container.appendChild(form);
 
-    function addBookToLibrary() {
-        // Append book to the library based on formData
-        const formData = new FormData(form);
-        bookFeatures = [];
-        for (item of formData) {
-            bookFeatures.push(item[1]);
-        }
-        let newBook = new Book(bookFeatures)
-        myLibrary.push(newBook);
-        console.log(newBook);
-    }
-    function addBookToTable(){
-        // Create a new Row containing the last book added to the library
-        let lastBook = myLibrary[myLibrary.length -1];
-        let newRow = document.createElement("tr");
-        // Deleting the id to make sure it doesn't show up in the table
-        const lastId = lastBook["id"];
-        delete lastBook["id"];
-
-        // Appending the individual features
-        for (feature in lastBook) {
-            let cell = document.createElement("td");
-            let dataPoint = document.createElement("p")
-            // lastBook is an object...
-            dataPoint.textContent = lastBook[feature]
-
-            cell.appendChild(dataPoint)
-            newRow.appendChild(cell)
-        }
-        // Reappending the id
-        lastBook["id"] = lastId;
-        // Append newRow
-        tableBody.appendChild(newRow)
-    }
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        addBookToLibrary();
+        addBookToLibrary(form);
         addBookToTable();
         form.remove();
         let table = document.querySelector("table")
-        table.appendChild(newButton);
+        table.appendChild(tableHead);
         table.appendChild(tableBody);
     })
 }
 
-function deleteBook() {
-
-}

@@ -14,10 +14,9 @@
             </svg>
             <p>Bookshelf</p>
         </h2>
-        <button class="newBookButton" onclick="openForm()">New</button>
         <div class="book_list">
             <table>
-                <tbody>
+                <thead>
                     <tr>
                         <th>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -64,7 +63,12 @@
                             </svg>
                             <p>Rating</p>
                         </th>
+                        <th>
+                            <button class="newBookButton" onclick="openForm()">New</button>
+                        </th>
                     </tr>
+                </thead>
+                <tbody>
                 </tbody>
             </table>
         </div>
