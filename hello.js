@@ -11,8 +11,8 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     this.date_f = date_f;
     this.rating = rating;
     // Auto incrementing book_id
-    book_id +=1
-    this.id = book_id
+    book_id += 1;
+    this.id = book_id;
     this.read = false;
 }
 
@@ -20,6 +20,8 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
 
 const tableHead = document.querySelector('thead')
 let tableBody = document.querySelector('tbody')
+let table = document.querySelector("table")
+
 function openForm() { //Called when the "NEW Button is clicked
     tableHead.remove();
     tableBody.remove();
@@ -54,22 +56,31 @@ function appendRow(myLibIndex) {
 
     // Adding the read and delete buttons
     let buttonCell = document.createElement("td");
-    buttonCell.classList.add("buttonCell")
+    buttonCell.classList.add("buttonCell");
     let deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.onclick = function(){
-        console.log(id)
-    };
+        // Deleting the object from myLibrary
+        myLibrary = myLibrary.filter((book)=> book.id !== id)
+        // Deleting the table body
+        tableBody.remove()
+        tableBody = document.createElement("tbody");
+        // Appending every book to the table again
+        for (let i = 0; i<myLibrary.length; i++) {
+            appendRow(i);
+        }
+        table.appendChild(tableBody);
+    }
 
-    let readButton = document.createElement("button")
-    readButton.textContent = "Change read status"
+    let readButton = document.createElement("button");
+    readButton.textContent = "Change read status";
 
     buttonCell.appendChild(deleteButton);
     buttonCell.appendChild(readButton);
-    newRow.appendChild(buttonCell)
+    newRow.appendChild(buttonCell);
 
     // Append newRow
-    tableBody.appendChild(newRow)
+    tableBody.appendChild(newRow);
 
     // Re appending the id and the read status
     newBook["id"] = id;
@@ -85,11 +96,6 @@ function addBookToLibrary() {
     }
     let newBook = new Book(bookFeatures)
     myLibrary.push(newBook);
-    console.log(newBook);
-}
-
-function deleteBook(id) {
-
 }
 
 let form;
@@ -246,7 +252,6 @@ function createForm() {
         addBookToLibrary(form);
         addBookToTable();
         form.remove();
-        let table = document.querySelector("table")
         table.appendChild(tableHead);
         table.appendChild(tableBody);
     })
