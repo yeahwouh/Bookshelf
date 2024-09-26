@@ -10,7 +10,9 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     this.date_s = date_s;
     this.date_f = date_f;
     this.rating = rating;
-    this.id = book_id + 1;
+    // Auto incrementing book_id
+    book_id +=1
+    this.id = book_id
     this.read = false;
 }
 
@@ -49,12 +51,15 @@ function appendRow(myLibIndex) {
         cell.appendChild(dataPoint);
         newRow.appendChild(cell);
     }
+
     // Adding the read and delete buttons
     let buttonCell = document.createElement("td");
     buttonCell.classList.add("buttonCell")
     let deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
-    deleteButton.onclick = deleteBook(id);
+    deleteButton.onclick = function(){
+        console.log(id)
+    };
 
     let readButton = document.createElement("button")
     readButton.textContent = "Change read status"
