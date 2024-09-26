@@ -1,5 +1,6 @@
 const myLibrary = [];
 
+let book_id = 0;
 function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     // the constructor...
     this.title = title;
@@ -9,14 +10,17 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     this.date_s = date_s;
     this.date_f = date_f;
     this.rating = rating;
+    this.id = book_id + 1
 }
 
 
 
-
-const table = document.querySelector("tbody")
+const newButton = document.querySelector(`.newBookButton`)
+const tableBody = document.querySelector('tbody')
 function openForm() { //Called when the "NEW Button is clicked
-    table.remove();
+    newButton.remove();
+    tableBody.remove();
+    console.log(newButton)
     createForm();
 }
 
@@ -184,6 +188,10 @@ function createForm() {
         // Create a new Row containing the last book added to the library
         let lastBook = myLibrary[myLibrary.length -1];
         let newRow = document.createElement("tr");
+        // Deleting the id to make sure it doesn't show up in the table
+        const lastId = lastBook["id"];
+        delete lastBook["id"];
+
         // Appending the individual features
         for (feature in lastBook) {
             let cell = document.createElement("td");
@@ -194,15 +202,22 @@ function createForm() {
             cell.appendChild(dataPoint)
             newRow.appendChild(cell)
         }
+        // Reappending the id
+        lastBook["id"] = lastId;
         // Append newRow
-        table.appendChild(newRow)
+        tableBody.appendChild(newRow)
     }
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         addBookToLibrary();
         addBookToTable();
         form.remove();
-        container.appendChild(table);
+        let table = document.querySelector("table")
+        table.appendChild(newButton);
+        table.appendChild(tableBody);
     })
 }
 
+function deleteBook() {
+
+}
