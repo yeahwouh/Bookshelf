@@ -1,4 +1,5 @@
 let myLibrary = [];
+const bgColor = "white"
 
 let book_id = 0;
 function Book([title, fiction, author, genres, date_s, date_f, rating]) {
@@ -13,7 +14,6 @@ function Book([title, fiction, author, genres, date_s, date_f, rating]) {
     // Auto incrementing book_id
     book_id += 1;
     this.id = book_id;
-    this.read = false;
 }
 
 
@@ -37,11 +37,9 @@ function addBookToTable(){
 function appendRow(myLibIndex) {
     let newBook = myLibrary[myLibIndex]
     let newRow = document.createElement("tr");
-    // Deleting the id and the "read status" to make sure it doesn't show up in the table
+    // Deleting the id to make sure it doesn't show up in the table
     let id = newBook["id"];
     delete newBook["id"];
-    let read = newBook["read"];
-    delete newBook["read"];
 
     // Appending the individual features
     for (let feature in newBook) {
@@ -57,34 +55,52 @@ function appendRow(myLibIndex) {
     // Adding the read and delete buttons
     let buttonCell = document.createElement("td");
     buttonCell.classList.add("buttonCell");
-    let deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
+    let deleteButton= document.createElement("button");
+
+    // Applied styling to delete button
+    deleteButton.style.border = 'none';
+    deleteButton.style.backgroundColor = bgColor
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("class", "w-6 h-6 text-gray-800 dark:text-white");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("xmlns", svgNS);
+    svg.setAttribute("width", "24");
+    svg.setAttribute("height", "24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+    path.setAttribute("stroke-width", "2");
+    path.setAttribute("d", "M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z");
+    svg.appendChild(path);
+
+    deleteButton.appendChild(svg)
+
     deleteButton.onclick = function(){
         // Deleting the object from myLibrary
         myLibrary = myLibrary.filter((book)=> book.id !== id)
         // Deleting the table body
         tableBody.remove()
         tableBody = document.createElement("tbody");
-        // Appending every book to the table again
+        // Appending every book to the table body again
         for (let i = 0; i<myLibrary.length; i++) {
             appendRow(i);
         }
+        // Appending the new table body
         table.appendChild(tableBody);
     }
 
-    let readButton = document.createElement("button");
-    readButton.textContent = "Change read status";
-
     buttonCell.appendChild(deleteButton);
-    buttonCell.appendChild(readButton);
     newRow.appendChild(buttonCell);
 
     // Append newRow
     tableBody.appendChild(newRow);
 
-    // Re appending the id and the read status
+    // Re appending the id
     newBook["id"] = id;
-    newBook["read"] = read;
 }
 
 function addBookToLibrary() {

@@ -64,3 +64,8 @@ p {
     font-family: times, Times New Roman, times-roman, georgia, serif;
     color: #444;
 }
+
+.newButtonCell {
+    width: 203.91px;
+    height: 98px;
+}
